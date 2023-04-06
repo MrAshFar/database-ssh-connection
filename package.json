@@ -1,36 +1,35 @@
 {
   "scripts": {
     "build": "webpack",
-    "start": "node dist/app.js"
+    "start": "node ./src/app.js",
+    "test": "node ./test/app.js"
   },
   "name": "database-ssh-connection",
-  "version": "1.0.0",
+  "version": "1.0.7",
   "description": "query mysql via ssh connection",
   "type": "commonjs",
   "private": false,
-  "devDependencies": {
-    "webpack": "^5.77.0",
-    "webpack-cli": "^5.0.1"
-  },
+  "devDependencies": {},
   "dependencies": {
     "dotenv": "^16.0.3",
     "mysql2": "^3.2.0",
-    "node-loader": "^2.0.0",
     "ssh2": "^1.11.0"
   },
-  "main": "webpack.config.js",
+  "types": "./database-ssh-connection.d.ts",
   "keywords": [
     "ssh",
+    "ssh2",
     "mysql"
   ],
   "author": "Ashkan Farmanbar",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MrAshFar/mysql-ssh2.git"
+    "url": "git+https://github.com/MrAshFar/database-ssh-connection.git"
   },
   "bugs": {
-    "url": "https://github.com/MrAshFar/mysql-ssh2/issues"
+    "url": "https://github.com/MrAshFar/database-ssh-connection/issues"
   },
-  "homepage": "https://github.com/MrAshFar/mysql-ssh2#readme"
+  "homepage": "https://github.com/MrAshFar/database-ssh-connection#readme",
+  "main": "./src/app.js"
 }

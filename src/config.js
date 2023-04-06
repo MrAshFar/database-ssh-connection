@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 module.exports.dbServer = dbServer = {
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -12,7 +10,7 @@ module.exports.tunnelConfig = {
   host: process.env.DB_SSH_HOST,
   port: process.env.DB_SSH_HOST_PORT,
   username: process.env.DB_SSH_USER,
-  privateKey: require("fs").readFileSync(process.env.PRIVATE_KEY_PATH),
+  privateKey: process.env.PRIVATE_KEY_PATH,
 };
 
 module.exports.forwardConfig = {

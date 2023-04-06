@@ -32,14 +32,10 @@ const SSHConnection = new Promise((resolve, reject) => {
         });
       });
     })
-    .connect(tunnelConfig);
-});
+    .connect(tunnelConfig)
+    .catch((err) => console.error(err.message));
+}).catch((err) => console.error(err.message));
 
-SSHConnection.then(
-  (resolve) => {
-    console.log(`ssh resolved ${resolve}`);
-  },
-  (reject) => {
-    console.log(`ssh reject ${reject}`);
-  }
-);
+module.exports.BeginMyslqSSH = () => {
+  return SSHConnection;
+};
