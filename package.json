@@ -3,7 +3,7 @@
     "build": "webpack",
     "start": "node dist/app.js"
   },
-  "name": "mysql-ssh2",
+  "name": "database-ssh-connection",
   "version": "1.0.0",
   "description": "query mysql via ssh connection",
   "type": "commonjs",
@@ -24,5 +24,13 @@
     "mysql"
   ],
   "author": "Ashkan Farmanbar",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrAshFar/mysql-ssh2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MrAshFar/mysql-ssh2/issues"
+  },
+  "homepage": "https://github.com/MrAshFar/mysql-ssh2#readme"
 }
