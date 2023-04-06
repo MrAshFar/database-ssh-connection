@@ -1,0 +1,28 @@
+{
+  "scripts": {
+    "build": "webpack",
+    "start": "node dist/app.js"
+  },
+  "name": "mysql-ssh2",
+  "version": "1.0.0",
+  "description": "query mysql via ssh connection",
+  "type": "commonjs",
+  "private": false,
+  "devDependencies": {
+    "webpack": "^5.77.0",
+    "webpack-cli": "^5.0.1"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "mysql2": "^3.2.0",
+    "node-loader": "^2.0.0",
+    "ssh2": "^1.11.0"
+  },
+  "main": "webpack.config.js",
+  "keywords": [
+    "ssh",
+    "mysql"
+  ],
+  "author": "Ashkan Farmanbar",
+  "license": "ISC"
+}
