@@ -2,7 +2,7 @@ const { dbServer, forwardConfig, tunnelConfig } = require("./config.js");
 const mysql = require("mysql2");
 const { Client } = require("ssh2");
 
-module.exports.BeginMyslqSSH = () => {
+module.exports.BeginMysqlSSH = () => {
   if (process.env.NODE_ENV == "development") {
     console.log("#------ dbServer -----------------------#");
     console.log(`dbServer: ${JSON.stringify(dbServer)}`);
