@@ -1,0 +1,9 @@
+{
+  "extends": "./node_modules/ts-node/node12/tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "outDir": "dist"
+  },
+  "include": ["src/*.ts"],
+  "exclude": ["node_modules"]
+}

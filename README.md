@@ -14,7 +14,9 @@ ReadPrivateKey("./pk/key").then(
 );
 ```
 
-**.env** (required)
+**.env**
+
+Environment variables are required, Create a `.env` file in the project root directory and add the below variables:
 
 ```
 NODE_ENV=development
