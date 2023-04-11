@@ -5,20 +5,20 @@
     "test": "node ./test/app.js"
   },
   "name": "database-ssh-connection",
-  "version": "1.1.7",
+  "version": "1.2.3",
   "description": "query mysql via ssh connection",
   "type": "commonjs",
   "private": false,
   "devDependencies": {
+    "@types/mysql": "^2.15.21",
     "@types/node": "^18.15.11",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "ts-node": "^10.9.1"
   },
   "dependencies": {
-    "@types/mysql": "^2.15.21",
     "dotenv": "^16.0.3",
     "mysql2": "^3.2.0",
-    "ssh2": "^1.11.0",
-    "ts-node": "^10.9.1"
+    "ssh2": "^1.11.0"
   },
   "types": "./database-ssh-connection.d.ts",
   "keywords": [
@@ -36,5 +36,5 @@
     "url": "https://github.com/MrAshFar/database-ssh-connection/issues"
   },
   "homepage": "https://github.com/MrAshFar/database-ssh-connection#readme",
-  "main": "./src/app.js"
+  "main": "./dist/app.js"
 }
