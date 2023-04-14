@@ -1,8 +1,7 @@
 import { Client, ClientChannel } from 'ssh2';
-import mysql, { Connection, ConnectionConfig } from 'mysql';
+import mysql, { Connection, QueryError } from 'mysql2';
 import { dbServer, forwardConfig, tunnelConfig } from './config';
 import { logEnvVariables } from './logger';
-import { MysqlError } from 'mysql';
 
 export const beginMysqlSSH = () => {
   if (process.env.NODE_ENV == 'development') {
@@ -22,15 +21,15 @@ export const beginMysqlSSH = () => {
           (err: any, stream: ClientChannel) => {
             if (err) reject(err);
 
-            const connectionConfig: ConnectionConfig = {
+            const connectionConfig = {
               ...dbServer,
-              // stream,
+              stream,
             };
 
             const connection: Connection =
               mysql.createConnection(connectionConfig);
 
-            connection.connect((error: MysqlError) => {
+            connection.connect((error: QueryError | null) => {
               if (error) reject(error);
               resolve(connection);
             });

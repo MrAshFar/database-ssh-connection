@@ -1,14 +1,17 @@
-const { BeginMysqlSSH, ReadPrivateKey } = require("../dist/app");
+const { beginMysqlSSH, readPrivateKey } = require('../dist/app');
 
 (async () => {
-  await ReadPrivateKey("./pk/key");
-  let connection = await BeginMysqlSSH();
-  console.log("ssh connection ok");
-  connection.query(`SELECT 1 AS result FROM user WHERE uid ='Ashkan';`, (error, results, fields) => {
-    console.log(JSON.stringify(error));
-    console.log(JSON.stringify(results));
-    console.log(JSON.stringify(fields));
-  });
+  await readPrivateKey('./pk/key');
+  const connection = await beginMysqlSSH();
+  console.log('ssh connection ok');
+  connection.query(
+    `SELECT 1 AS result FROM user WHERE uid ='Ashkan';`,
+    (error, results, fields) => {
+      console.log(JSON.stringify(error));
+      console.log(JSON.stringify(results));
+      console.log(JSON.stringify(fields));
+    }
+  );
 })();
 
 // (() => {

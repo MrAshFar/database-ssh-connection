@@ -1,4 +1,4 @@
-declare module "database-ssh-connection" {
-  export function BeginMysqlSSH(): Promise<any>;
-  export function ReadPrivateKey(path: string): Promise<any>;
+declare module 'database-ssh-connection' {
+  export function beginMysqlSSH(): Promise<any>;
+  export function readPrivateKey(path: string): Promise<any>;
 }
