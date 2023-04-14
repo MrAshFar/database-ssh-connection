@@ -1,33 +1,36 @@
-const { dbServer, forwardConfig, tunnelConfig } = require("./config");
-const mysql = require("mysql2");
-const { Client } = require("ssh2");
-const { log_env_variables } = require("./logger");
+import { Client, ClientChannel } from 'ssh2';
+import mysql, { Connection, ConnectionConfig } from 'mysql';
+import { dbServer, forwardConfig, tunnelConfig } from './config';
+import { logEnvVariables } from './logger';
+import { MysqlError } from 'mysql';
 
-module.exports.BeginMysqlSSH = () => {
-  if (process.env.NODE_ENV == "development") {
-    log_env_variables(dbServer, forwardConfig, tunnelConfig);
+export const beginMysqlSSH = () => {
+  if (process.env.NODE_ENV == 'development') {
+    logEnvVariables(dbServer, forwardConfig, tunnelConfig);
   }
-  // create an instance of SSH Client
-  const sshClient = new Client();
+
+  const sshClient: Client = new Client();
+
   return new Promise((resolve, reject) => {
     sshClient
-      .on("ready", () => {
+      .on('ready', () => {
         sshClient.forwardOut(
-          forwardConfig.srcHost,
+          forwardConfig.srcHost!,
           forwardConfig.srcPort,
-          forwardConfig.dstHost,
+          forwardConfig.dstHost!,
           forwardConfig.dstPort,
-          (err: any, stream: any) => {
+          (err: any, stream: ClientChannel) => {
             if (err) reject(err);
 
-            const updatedDbServer = {
+            const connectionConfig: ConnectionConfig = {
               ...dbServer,
-              stream,
+              // stream,
             };
 
-            const connection = mysql.createConnection(updatedDbServer);
+            const connection: Connection =
+              mysql.createConnection(connectionConfig);
 
-            connection.connect((error: any) => {
+            connection.connect((error: MysqlError) => {
               if (error) reject(error);
               resolve(connection);
             });
@@ -35,18 +38,17 @@ module.exports.BeginMysqlSSH = () => {
         );
       })
       .connect(tunnelConfig);
-  }).catch((err) => console.error(err.message));
+  }).catch((err: any) => console.error(err.message));
 };
 
-module.exports.ReadPrivateKey = (path: string) => {
+export const readPrivateKey = (path: string) => {
   return new Promise((resolve, reject) => {
-    require("fs").readFile(path, "utf8", function (err: any, data: any) {
+    require('fs').readFile(path, 'utf8', function (err: any, data: any) {
       if (!err) {
         tunnelConfig.privateKey = data;
         resolve(true);
       } else {
-        console.error(err.message);
-        reject(false);
+        reject(err.message);
       }
     });
   }).catch((err) => console.error(err.message));

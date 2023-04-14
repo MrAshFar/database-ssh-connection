@@ -1,0 +1,12 @@
+{
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"prettier.singleQuote": true,
+	"editor.tabSize": 2,
+	"prettier.useTabs": false,
+	"editor.stickyScroll.defaultModel": "indentationModel",
+	"editor.wrappingIndent": "indent",
+	"editor.indentSize": "tabSize"
+}
