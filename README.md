@@ -2,40 +2,52 @@
 
 Example 1:
 
-```
+```js
+const { beginMysqlSSH, readPrivateKey } = require('../src/app');
+
 (async () => {
-  await ReadPrivateKey("./pk/key");
-  let connection = await BeginMysqlSSH();
-  console.log("ssh connection ok");
-  connection.query(`SELECT 1 AS result FROM user WHERE uid ='Ashkan';`, (error, results, fields) => {
-    console.log(JSON.stringify(error));
-    console.log(JSON.stringify(results));
-    console.log(JSON.stringify(fields));
-  });
+  await readPrivateKey('./pk/key');
+
+  let connection = await beginMysqlSSH();
+
+  console.log('ssh connection ok');
+
+  connection.query(
+    `SELECT 1 AS result FROM user WHERE uid ='Ashkan';`,
+    (error, results, fields) => {
+      console.log(JSON.stringify(error));
+      console.log(JSON.stringify(results));
+      console.log(JSON.stringify(fields));
+    }
+  );
 })();
 ```
 
 Example 2:
 
-```
-const { BeginMysqlSSH, ReadPrivateKey } = require("../src/app");
+```js
+const { beginMysqlSSH, readPrivateKey } = require('../src/app');
 
 (() => {
-  ReadPrivateKey("./pk/key").then(
+  readPrivateKey('./pk/key').then(
     () => {
-      BeginMysqlSSH().then(
+      beginMysqlSSH().then(
         (connection) => {
-          console.log("ssh connection ok");
-          connection.query(`SELECT 1 AS result FROM user WHERE uid ='Ashkan';`, (error, results, fields) => {
-            console.log(JSON.stringify(error));
-            console.log(JSON.stringify(results));
-            console.log(JSON.stringify(fields));
-          });
+          console.log('ssh connection ok');
+
+          connection.query(
+            `SELECT 1 AS result FROM user WHERE uid ='Ashkan';`,
+            (error, results, fields) => {
+              console.log(JSON.stringify(error));
+              console.log(JSON.stringify(results));
+              console.log(JSON.stringify(fields));
+            }
+          );
         },
-        (rej) => console.log("rej", rej)
+        (rej) => console.log('rej', rej)
       );
     },
-    () => console.log("unable to read private key file")
+    () => console.log('unable to read the private key file')
   );
 })();
 ```

@@ -93,6 +93,7 @@ out
 src
 test
 tsconfig.json
+.vscode
 pk
 
 # Gatsby files
