@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
 import { ConnectionOptions } from 'mysql2';
+import { ConnectConfig } from 'ssh2';
 dotenv.config();
 
 export const connectionConfig: ConnectionOptions = {
@@ -10,7 +11,7 @@ export const connectionConfig: ConnectionOptions = {
   database: process.env.DATABASE,
 };
 
-export const tunnelConfig = {
+export const tunnelConfig: ConnectConfig = {
   host: process.env.SSH_HOST,
   port: parseInt(process.env.SSH_PORT!),
   username: process.env.SSH_USERNAME,

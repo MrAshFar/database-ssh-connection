@@ -1,34 +1,41 @@
 import { Client, ClientChannel } from 'ssh2';
 import mysql, { Connection, QueryError } from 'mysql2';
-import { connectionConfig, forwardConfig, tunnelConfig } from './config';
-import { logEnvVariables } from './logger';
+import { connectionConfig, forwardConfig, tunnelConfig } from './config.js';
+import { logEnvVariables } from './logger.js';
 
 const sshClient: Client = new Client();
 
 export const beginMysqlSSH = async (
   privateKey: string
 ): Promise<Connection> => {
+  if (!privateKey) throw Error('private key is empty');
+
+  tunnelConfig.privateKey = privateKey;
+
   if (process.env.NODE_ENV == 'development')
     logEnvVariables(connectionConfig, forwardConfig, tunnelConfig);
 
-  if (!privateKey) throw Error('private key is empty');
+  const connection: Connection = await new Promise((resolve, reject) => {
+    sshClient.on('ready', () => {
+      sshClientOnReadyListener(sshClient).then(
+        (res: Connection) => resolve(res),
+        (rej) => reject(rej)
+      );
+    });
 
-  return new Promise((resolve, reject) => {
-    try {
-      sshClient.addListener('ready', () => {
-        resolve(sshClientOnReadyListener(sshClient));
-      });
-      sshClient.connect(tunnelConfig);
-    } catch (err) {
-      reject(err);
-    }
+    sshClient.on('connect', () => console.log('ssh client connected'));
+    sshClient.on('end', () => console.log('ssh client connection end'));
+    sshClient.on('close', () => console.log('ssh client connection closed'));
+
+    sshClient.connect(tunnelConfig);
   });
+  return connection;
 };
 
 const sshClientOnReadyListener = async (
   sshClient: Client
 ): Promise<Connection> => {
-  return new Promise((resolve, reject) => {
+  const connection: Connection = await new Promise((resolve, reject) => {
     sshClient.forwardOut(
       forwardConfig.srcHost!,
       forwardConfig.srcPort,
@@ -46,4 +53,5 @@ const sshClientOnReadyListener = async (
       }
     );
   });
+  return connection;
 };

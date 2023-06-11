@@ -1,34 +1,20 @@
-const { beginMysqlSSH } = require('../dist/app');
+import { beginMysqlSSH } from '../dist/app.js';
+import { readFileSync } from 'node:fs';
 
 (async () => {
-  await readPrivateKey('./pk/key');
-  const connection = await beginMysqlSSH();
-  console.log('ssh connection ok');
-  connection.query(
-    `SELECT 1 AS result FROM user WHERE uid ='Ashkan';`,
-    (error, results, fields) => {
-      console.log(JSON.stringify(error));
-      console.log(JSON.stringify(results));
-      console.log(JSON.stringify(fields));
-    }
-  );
+  try {
+    const key = readFileSync('./pk/key', { encoding: 'utf8' });
+    const connection = await beginMysqlSSH(key);
+    console.log('ssh connection ok');
+    connection.query(
+      `SELECT 1 AS result FROM user WHERE uid ='Ashkan';`,
+      (error, results, fields) => {
+        console.log(JSON.stringify(error));
+        console.log(JSON.stringify(results));
+        console.log(JSON.stringify(fields));
+      }
+    );
+  } catch (err) {
+    console.error(err);
+  }
 })();
-
-// (() => {
-//   ReadPrivateKey("./pk/key").then(
-//     () => {
-//       BeginMysqlSSH().then(
-//         (connection) => {
-//           console.log("ssh connection ok");
-//           connection.query(`SELECT 1 AS result FROM user WHERE uid ='Ashkan';`, (error, results, fields) => {
-//             console.log(JSON.stringify(error));
-//             console.log(JSON.stringify(results));
-//             console.log(JSON.stringify(fields));
-//           });
-//         },
-//         (rej) => console.log("rej", rej)
-//       );
-//     },
-//     () => console.log("unable to read private key file")
-//   );
-// })();
