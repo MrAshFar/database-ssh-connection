@@ -1,4 +1,4 @@
-const { beginMysqlSSH, readPrivateKey } = require('../dist/app');
+const { beginMysqlSSH } = require('../dist/app');
 
 (async () => {
   await readPrivateKey('./pk/key');

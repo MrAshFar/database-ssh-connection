@@ -2,7 +2,7 @@
   "extends": "./node_modules/ts-node/node12/tsconfig.json",
   "compilerOptions": {
     "moduleResolution": "node",
-    "module": "CommonJS",
+    "module": "ES6",
     "outDir": "dist"
   },
   "noImplicitAny": true,

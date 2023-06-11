@@ -1,54 +1,49 @@
 import { Client, ClientChannel } from 'ssh2';
 import mysql, { Connection, QueryError } from 'mysql2';
-import { dbServer, forwardConfig, tunnelConfig } from './config';
+import { connectionConfig, forwardConfig, tunnelConfig } from './config';
 import { logEnvVariables } from './logger';
 
-export const beginMysqlSSH = () => {
-  if (process.env.NODE_ENV == 'development') {
-    logEnvVariables(dbServer, forwardConfig, tunnelConfig);
-  }
+const sshClient: Client = new Client();
 
-  const sshClient: Client = new Client();
+export const beginMysqlSSH = async (
+  privateKey: string
+): Promise<Connection> => {
+  if (process.env.NODE_ENV == 'development')
+    logEnvVariables(connectionConfig, forwardConfig, tunnelConfig);
+
+  if (!privateKey) throw Error('private key is empty');
 
   return new Promise((resolve, reject) => {
-    sshClient
-      .on('ready', () => {
-        sshClient.forwardOut(
-          forwardConfig.srcHost!,
-          forwardConfig.srcPort,
-          forwardConfig.dstHost!,
-          forwardConfig.dstPort,
-          (err: any, stream: ClientChannel) => {
-            if (err) reject(err);
-
-            const connectionConfig = {
-              ...dbServer,
-              stream,
-            };
-
-            const connection: Connection =
-              mysql.createConnection(connectionConfig);
-
-            connection.connect((error: QueryError | null) => {
-              if (error) reject(error);
-              resolve(connection);
-            });
-          }
-        );
-      })
-      .connect(tunnelConfig);
-  }).catch((err: any) => console.error(err.message));
+    try {
+      sshClient.addListener('ready', () => {
+        resolve(sshClientOnReadyListener(sshClient));
+      });
+      sshClient.connect(tunnelConfig);
+    } catch (err) {
+      reject(err);
+    }
+  });
 };
 
-export const readPrivateKey = (path: string) => {
+const sshClientOnReadyListener = async (
+  sshClient: Client
+): Promise<Connection> => {
   return new Promise((resolve, reject) => {
-    require('fs').readFile(path, 'utf8', function (err: any, data: any) {
-      if (!err) {
-        tunnelConfig.privateKey = data;
-        resolve(true);
-      } else {
-        reject(err.message);
+    sshClient.forwardOut(
+      forwardConfig.srcHost!,
+      forwardConfig.srcPort,
+      forwardConfig.dstHost!,
+      forwardConfig.dstPort,
+      (err: any, stream: ClientChannel) => {
+        if (err) reject(err);
+        const config = { ...connectionConfig, stream };
+        const connection: Connection = mysql.createConnection(config);
+
+        connection.connect((error: QueryError | null) => {
+          if (error) reject(error);
+          resolve(connection);
+        });
       }
-    });
-  }).catch((err) => console.error(err.message));
+    );
+  });
 };

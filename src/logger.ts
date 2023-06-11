@@ -1,10 +1,10 @@
 export const logEnvVariables = (
-  dbServer: any,
+  connectionConfig: any,
   forwardConfig: any,
   tunnelConfig: any
 ) => {
-  console.log('#------ dbServer -----------------------#');
-  console.log(`dbServer: ${JSON.stringify(dbServer)}`);
+  console.log('#------ connection configuration -----------------------#');
+  console.log(`dbServer: ${JSON.stringify(connectionConfig)}`);
   console.log('#------ forwardConfig ------------------#');
   console.log(`forwardConfig: ${JSON.stringify(forwardConfig)}`);
   console.log('#------ tunnelConfig -------------------#');
