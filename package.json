@@ -2,7 +2,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node ./src/app.ts",
-    "test": "node ./test/app.js"
+    "test": "node ./test/test.js"
   },
   "name": "database-ssh-connection",
   "version": "1.2.6",
@@ -21,7 +21,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.3.1",
     "mysql2": "^3.2.1",
     "ssh2": "^1.11.0"
   },

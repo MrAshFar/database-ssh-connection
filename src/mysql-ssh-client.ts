@@ -1,24 +1,24 @@
 import { Client, ClientChannel } from 'ssh2';
 import mysql, { Connection, QueryError } from 'mysql2';
 import { SSHClientConfig } from '../database-ssh-connection';
-import { logEnvVariables } from './log';
+import { logEnvVariables } from './log.js';
 
 const isDev = process.env.NODE_ENV != 'production';
 
 export const beginSSHClient = async (
   sshClient: Client,
-  options: SSHClientConfig
+  config: SSHClientConfig
 ): Promise<Connection> => {
   const connection: Connection = await new Promise((resolve, reject) => {
     if (isDev)
       logEnvVariables(
-        options.connectionConfig,
-        options.forwardConfig,
-        options.tunnelConfig
+        config.connectionConfig,
+        config.forwardConfig,
+        config.tunnelConfig
       );
 
     sshClient.on('ready', () => {
-      sshClientOnReadyListener(sshClient, options).then(
+      sshClientOnReadyListener(sshClient, config).then(
         (res: Connection) => resolve(res),
         (rej) => reject(rej)
       );
@@ -30,25 +30,28 @@ export const beginSSHClient = async (
       sshClient.on('close', () => console.log('ssh client connection closed'));
     }
 
-    sshClient.connect(options.tunnelConfig);
+    sshClient.connect(config.tunnelConfig);
   });
   return connection;
 };
 
 const sshClientOnReadyListener = async (
   sshClient: Client,
-  options: any
+  config: any
 ): Promise<Connection> => {
   const connection: Connection = await new Promise((resolve, reject) => {
     sshClient.forwardOut(
-      options.forwardConfig.srcHost!,
-      options.forwardConfig.srcPort,
-      options.forwardConfig.dstHost!,
-      options.forwardConfig.dstPort,
+      config.forwardConfig.srcHost!,
+      config.forwardConfig.srcPort,
+      config.forwardConfig.dstHost!,
+      config.forwardConfig.dstPort,
       (err: any, stream: ClientChannel) => {
         if (err) reject(err);
-        const config = { ...options.connectionConfig, stream };
-        const connection: Connection = mysql.createConnection(config);
+
+        const connection: Connection = mysql.createConnection({
+          ...config.connectionConfig,
+          stream,
+        });
 
         connection.connect((error: QueryError | null) => {
           if (error) reject(error);

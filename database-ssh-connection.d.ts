@@ -2,7 +2,7 @@ import Connection from 'mysql2/typings/mysql/lib/Connection';
 
 export function beginMysqlSSH(
   privateKey: string,
-  options?: SSHClientConfig = undefined
+  config?: SSHClientConfig
 ): Promise<Connection>;
 
 export declare type SSHClientConfig = {
