@@ -1,13 +1,13 @@
 import { Client, ClientChannel } from 'ssh2';
 import mysql, { Connection, QueryError } from 'mysql2';
-import { SSHClientOptions } from '../database-ssh-connection';
+import { SSHClientConfig } from '../database-ssh-connection';
 import { logEnvVariables } from './log';
 
 const isDev = process.env.NODE_ENV != 'production';
 
 export const beginSSHClient = async (
   sshClient: Client,
-  options: SSHClientOptions
+  options: SSHClientConfig
 ): Promise<Connection> => {
   const connection: Connection = await new Promise((resolve, reject) => {
     if (isDev)

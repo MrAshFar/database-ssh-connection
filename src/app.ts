@@ -1,5 +1,7 @@
 import { Client } from 'ssh2';
 import { Connection } from 'mysql2';
+import { SSHClientConfig } from '../database-ssh-connection.js';
+import { beginSSHClient } from './mysql-ssh-client.js';
 
 import {
   connectionConfigEnv,
@@ -7,23 +9,26 @@ import {
   tunnelConfigEnv,
 } from './config.js';
 
-import { SSHClientOptions } from '../database-ssh-connection.js';
-import { beginSSHClient } from './mysql-ssh-client.js';
-
 const sshClient: Client = new Client();
 
 export const beginMysqlSSH = async (
-  privateKey: string
+  privateKey: string,
+  options: SSHClientConfig | undefined | null = undefined
 ): Promise<Connection> => {
   if (!privateKey) throw Error('private key is empty');
+  let config: SSHClientConfig;
 
-  tunnelConfigEnv.privateKey = privateKey;
+  if (!options) {
+    tunnelConfigEnv.privateKey = privateKey;
+    config = {
+      connectionConfig: connectionConfigEnv,
+      forwardConfig: forwardConfigEnv,
+      tunnelConfig: tunnelConfigEnv,
+    };
+  } else {
+    options.tunnelConfig.privateKey = privateKey;
+    config = options;
+  }
 
-  const options: SSHClientOptions = {
-    connectionConfig: connectionConfigEnv,
-    forwardConfig: forwardConfigEnv,
-    tunnelConfig: tunnelConfigEnv,
-  };
-
-  return await beginSSHClient(sshClient, options);
+  return await beginSSHClient(sshClient, config);
 };
