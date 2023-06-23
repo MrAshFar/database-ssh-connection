@@ -6,6 +6,6 @@
     "outDir": "dist"
   },
   "noImplicitAny": true,
-  "include": ["src/*.ts"],
+  "include": ["src/*.ts", "./database-ssh-connection.d.ts"],
   "exclude": ["node_modules"]
 }

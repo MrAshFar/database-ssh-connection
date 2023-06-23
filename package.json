@@ -5,7 +5,7 @@
     "test": "node ./test/app.js"
   },
   "name": "database-ssh-connection",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "query mysql via ssh connection",
   "type": "module",
   "private": false,
