@@ -1,10 +1,11 @@
 {
   "scripts": {
     "build": "tsc",
-    "test": "ts-node-esm ./test/test.ts"
+    "test": "ts-node-esm ./test/test.ts",
+    "publish": "npm publish --access public"
   },
   "name": "database-ssh-connection",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "description": "query mysql via ssh connection",
   "type": "module",
   "private": false,
@@ -38,5 +39,5 @@
     "url": "https://github.com/MrAshFar/database-ssh-connection/issues"
   },
   "homepage": "https://github.com/MrAshFar/database-ssh-connection#readme",
-  "main": "./dist/app.js"
+  "main": "./dist/index.js"
 }
