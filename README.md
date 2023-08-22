@@ -1,43 +1,44 @@
 **HOW TO USE**
 
-Example:
-
 ```js
-import { beginMysqlSSH } from '../dist/app.js';
-import { readFileSync } from 'node:fs';
+const sshClient = new Client();
 
-(async () => {
-  const key = readFileSync('./pk/key', { encoding: 'utf8' });
-  const connection = await beginMysqlSSH(key);
-  console.log('ssh connection ok');
-  connection.query(
-    `SELECT 1 AS result FROM user WHERE uid ='Ashkan';`,
-    (error, results, fields) => {
-      console.log(JSON.stringify(error));
-      console.log(JSON.stringify(results));
-      console.log(JSON.stringify(fields));
-    }
-  );
-})();
-```
+const key = readFileSync('./pk/key', { encoding: 'utf8' });
 
-**.env**
+const config: SSHClientConfig = {
+  connectionConfig: {
+    host: '127.0.0.1',
+    port: 3306,
+    user: 'database username',
+    password: 'database password',
+    database: 'database name',
+  },
+  forwardConfig: {
+    srcHost: '127.0.0.1', // any valid address
+    srcPort: 9000, // any open port
+    dstHost: '127.0.0.1', // destination database
+    dstPort: 3306, // destination port
+  },
 
-Environment variables are required, Create a `.env` file in the project root directory and add the below variables:
+  tunnelConfig: {
+    host: 'YOUR.HOST.IP.ADDRESS',
+    port: 22,
+    username: 'root',
+    privateKey: key,
+  },
+};
 
-```
-NODE_ENV = 'development'
-# connectionConfig
-DB_HOST = '127.0.0.1'
-DB_PORT = 3306
-DB_USERNAME = 'database username'
-DB_PASSWORD = 'database password'
-DATABASE = 'database name'
-# ssh configuration
-SSH_HOST = 'YOUR.HOST.IP.ADDRESS'
-SSH_PORT = 22
-SSH_USERNAME = 'root'
-# local machine configuration, SRC_PORT = any open port
-SRC_HOST = '127.0.0.1'
-SRC_PORT = 9001
+const connection = await beginMysqlSSH(sshClient, config);
+
+console.log('ssh connection ok');
+
+connection.query(
+  `SELECT 1 AS result FROM user WHERE uid ='Ashkan';`,
+  (error: any, results: any, fields: any) => {
+    console.log(JSON.stringify(error));
+    console.log(JSON.stringify(results));
+    console.log(JSON.stringify(fields));
+    process.exit(0);
+  }
+);
 ```

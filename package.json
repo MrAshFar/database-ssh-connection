@@ -1,11 +1,10 @@
 {
   "scripts": {
     "build": "tsc",
-    "start": "node ./src/app.ts",
-    "test": "node ./test/test.js"
+    "test": "ts-node-esm ./test/test.ts"
   },
   "name": "database-ssh-connection",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "query mysql via ssh connection",
   "type": "module",
   "private": false,
@@ -21,11 +20,9 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "dotenv": "^16.3.1",
-    "mysql2": "^3.2.1",
-    "ssh2": "^1.11.0"
+    "mysql2": "^3.2.1"
   },
-  "types": "./database-ssh-connection.d.ts",
+  "types": "index.d.ts",
   "keywords": [
     "ssh",
     "ssh2",

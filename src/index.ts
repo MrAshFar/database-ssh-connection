@@ -1,22 +1,16 @@
 import { Client, ClientChannel } from 'ssh2';
-import mysql, { Connection, QueryError } from 'mysql2';
-import { SSHClientConfig } from '../database-ssh-connection';
-import { logEnvVariables } from './log.js';
+import { Connection, createConnection, QueryError } from 'mysql2';
+import { SSHClientConfig } from '../index.js';
 
-const isDev = process.env.NODE_ENV != 'production';
-
-export const beginSSHClient = async (
+/** begin ssh connection to mysql database
+ * @param {Client} sshClient pass ssh2 client
+ * @param {SSHClientConfig} config ssh client config
+ */
+export async function beginMysqlSSH(
   sshClient: Client,
   config: SSHClientConfig
-): Promise<Connection> => {
+): Promise<Connection> {
   const connection: Connection = await new Promise((resolve, reject) => {
-    if (isDev)
-      logEnvVariables(
-        config.connectionConfig,
-        config.forwardConfig,
-        config.tunnelConfig
-      );
-
     sshClient.on('ready', () => {
       sshClientOnReadyListener(sshClient, config).then(
         (res: Connection) => resolve(res),
@@ -24,16 +18,10 @@ export const beginSSHClient = async (
       );
     });
 
-    if (isDev) {
-      sshClient.on('connect', () => console.log('ssh client connected'));
-      sshClient.on('end', () => console.log('ssh client connection end'));
-      sshClient.on('close', () => console.log('ssh client connection closed'));
-    }
-
     sshClient.connect(config.tunnelConfig);
   });
   return connection;
-};
+}
 
 const sshClientOnReadyListener = async (
   sshClient: Client,
@@ -48,7 +36,7 @@ const sshClientOnReadyListener = async (
       (err: any, stream: ClientChannel) => {
         if (err) reject(err);
 
-        const connection: Connection = mysql.createConnection({
+        const connection: Connection = createConnection({
           ...config.connectionConfig,
           stream,
         });
